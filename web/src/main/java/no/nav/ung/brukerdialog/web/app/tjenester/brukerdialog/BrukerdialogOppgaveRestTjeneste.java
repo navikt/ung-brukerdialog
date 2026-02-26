@@ -63,6 +63,7 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Henter en spesifikk oppgave basert på oppgavereferanse", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.READ, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto hentOppgave(
+        @Valid
         @NotNull
         @PathParam("oppgavereferanse")
         @Parameter(description = "Unik referanse til oppgaven")
@@ -76,6 +77,7 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Lukker en oppgave", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto lukkOppgave(
+        @Valid
         @NotNull
         @PathParam("oppgavereferanse")
         @Parameter(description = "Unik referanse til oppgaven")
@@ -89,7 +91,12 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Åpner en oppgave", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto åpneOppgave(
-        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class) UUID oppgavereferanse) {
+        @Valid
+        @NotNull
+        @PathParam("oppgavereferanse")
+        @Parameter(description = "Unik referanse til oppgaven")
+        @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class)
+        UUID oppgavereferanse) {
         return oppgaveTjeneste.åpneOppgave(oppgavereferanse, finnAktørId());
     }
 
@@ -98,7 +105,12 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Markerer en oppgave som løst", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto løsOppgave(
-        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class) UUID oppgavereferanse) {
+        @Valid
+        @NotNull
+        @PathParam("oppgavereferanse")
+        @Parameter(description = "Unik referanse til oppgaven")
+        @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class)
+        UUID oppgavereferanse) {
         return oppgaveTjeneste.løsOppgave(oppgavereferanse, finnAktørId());
     }
 
@@ -108,7 +120,10 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Oppretter oppgave for å søke ytelse", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.UNGDOMSPROGRAM)
     public BrukerdialogOppgaveDto opprettSøkYtelseOppgave(
-        @NotNull @Parameter(description = "Data om hvem og hva det søkes om") @Valid @TilpassetAbacAttributt(supplierClass = AbacAttributtSupplier.class)
+        @Valid
+        @NotNull
+        @Parameter(description = "Data om hvem og hva det søkes om")
+        @TilpassetAbacAttributt(supplierClass = AbacAttributtSupplier.class)
         OpprettOppgaveDto opprettSøkYtelseOppgaveDto) {
         return veilederOppgaveTjeneste.opprettSøkYtelseOppgave(opprettSøkYtelseOppgaveDto);
     }
