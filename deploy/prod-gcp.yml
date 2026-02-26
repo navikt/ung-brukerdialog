@@ -7,7 +7,7 @@ metadata:
     team: k9saksbehandling
 spec:
   image: "{{ image }}"
-  port: 8901
+  port: 8902
   liveness:
     path: /ung/brukerdialog/internal/health/isAlive
     initialDelay: 30
