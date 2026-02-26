@@ -28,9 +28,9 @@ public class ApplicationConfig extends ResourceConfig {
 
     public OpenAPI resolveOpenAPI() {
         final var info = new Info()
-            .title("Ung saksbehandling - Saksbehandling for ungdomsprogramytelsen")
+            .title("Ung brukerdialog - Brukerdialog-API for ungdomsprogramytelsen og aktivitetspenger")
             .version("2.0")
-            .description("REST grensesnitt for Vedtaksløsningen.");
+            .description("REST grensesnitt for data tilgjengelig for brukerdialog knyttet til vedtaksløsning for ungdomsprogramytelsen og aktivitetspenger.");
 
         final var server =new Server().url("/ung/brukerdialog");
         final var openapiSetupHelper = new OpenApiSetupHelper(this, info, server);
