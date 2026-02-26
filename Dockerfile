@@ -24,4 +24,4 @@ COPY --link web/target/classes/logback.xml /app/conf/
 COPY --link web/target/lib/no.nav.ung.brukerdialog* /app/lib/
 COPY --link web/target/app.jar /app/
 
-EXPOSE 8901
+EXPOSE 8902
