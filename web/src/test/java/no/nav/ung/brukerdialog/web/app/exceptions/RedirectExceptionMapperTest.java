@@ -18,8 +18,8 @@ public class RedirectExceptionMapperTest {
     public void setUp() throws Exception {
         initMocks(this);
 
+        System.setProperty("loadbalancer.url", "https://erstatter.nav.no");
         exceptionMapper = new RedirectExceptionMapper();
-        System.setProperty("loadBalancerUrl", "https://erstatter.nav.no");
         ContextPathHolder.instance("/ung/brukerdialog");
     }
 
