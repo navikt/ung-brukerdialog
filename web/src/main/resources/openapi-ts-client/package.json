@@ -1,0 +1,20 @@
+{
+  "name": "@navikt/ung-brukerdialog-typescript-client",
+  "version": "0.2.0-beta",
+  "type": "module",
+  "description": "Typescript client for ung-brukerdialog. Automatically generated from openapi specification",
+  "keywords": [
+    "ung-brukerdialog",
+    "openapi"
+  ],
+  "author": "https://github.com/navikt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navikt/ung-brukerdialog.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "MIT",
+  "packageManager": "yarn@4.1.1"
+}

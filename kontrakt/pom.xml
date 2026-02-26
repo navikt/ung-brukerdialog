@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>no.nav.ung.brukerdialog</groupId>
+        <artifactId>ung-brukerdialog</artifactId>
+        <version>${revision}${sha1}${changelist}</version>
+    </parent>
+
+    <artifactId>kontrakt</artifactId>
+    <packaging>jar</packaging>
+    <name>ung-brukerdialog :: Kontrakter</name>
+    <description>Kontrakter for tjenester eksponert / topics publisert av ung-brukerdialog</description>
+
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+        <legacy.artifactId>kontrakt</legacy.artifactId>
+    </properties>
+
+    <dependencies>
+        <!-- for Bean validation -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.expressly</groupId>
+            <artifactId>expressly</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.k9.felles.sikkerhet</groupId>
+            <artifactId>k9-felles-sikkerhet-kontrakt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.ung.brukerdialog</groupId>
+            <artifactId>felles-util</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${kontrakt.java.version}</source>
+                    <target>${kontrakt.java.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <release>${kontrakt.java.version}</release>
+                    <parameters>true</parameters>
+                    <!-- ikke kompiler denne modulen med enable-preview. skaper trøbbel ved oppgradering av java versjoner der kontraker benyttes av andre -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

@@ -1,0 +1,74 @@
+package no.nav.ung.brukerdialog.web.app.tjenester;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import no.nav.k9.felles.apptjeneste.AppServiceHandler;
+import no.nav.k9.prosesstask.impl.BatchTaskScheduler;
+import no.nav.k9.prosesstask.impl.TaskManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+@ApplicationScoped
+public class ApplicationServiceStarterImpl implements ApplicationServiceStarter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationServiceStarterImpl.class);
+    private Map<AppServiceHandler, AtomicBoolean> serviceMap = new HashMap<>();
+    private TaskManager taskManager;
+    private BatchTaskScheduler batchTaskScheduler;
+
+    ApplicationServiceStarterImpl() {
+        // CDI
+    }
+
+    @Inject
+    public ApplicationServiceStarterImpl(TaskManager taskManager,
+                                         BatchTaskScheduler batchTaskScheduler) {
+        this.taskManager = taskManager;
+        this.batchTaskScheduler = batchTaskScheduler;
+    }
+
+    @Override
+    public void startServices() {
+        taskManager.start();
+        batchTaskScheduler.start();
+        serviceMap.forEach((key, value) -> {
+            if (value.compareAndSet(false, true)) {
+                LOGGER.info("starter service: {}", key.getClass().getSimpleName());
+                key.start();
+            }
+        });
+    }
+
+    @Override
+    public void stopServices() {
+        List<Thread> threadList = new ArrayList<>();
+        serviceMap.forEach((key, value) -> {
+            if (value.compareAndSet(true, false)) {
+                LOGGER.info("stopper service: {}", key.getClass().getSimpleName());
+                Thread t = new Thread(key::stop);
+                t.start();
+                threadList.add(t);
+            }
+        });
+        while (!threadList.isEmpty()) {
+            Thread t = threadList.get(0);
+            try {
+                t.join(31000);
+                threadList.remove(t);
+            } catch (InterruptedException e) {
+                LOGGER.warn(e.getMessage());
+                t.interrupt();
+            }
+        }
+
+        batchTaskScheduler.stop();
+        taskManager.stop();
+    }
+
+}

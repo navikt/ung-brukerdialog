@@ -1,0 +1,91 @@
+version: 2
+registries:
+  ung-sak:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/ung-sak
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+  k9-felles:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/k9-felles
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+  k9-format:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/k9-format
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+  k9-prosesstask:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/k9-prosesstask
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+  k9-oppdrag:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/k9-oppdrag
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+  fp-tidsserie:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/fp-tidsserie
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+  ghcr:
+    type: docker-registry
+    url: ghcr.io
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+updates:
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "06:00"
+      timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 7
+      exclude:
+        - "no.nav.*"
+    open-pull-requests-limit: 15
+    registries:
+      - ung-sak
+      - k9-felles
+      - k9-prosesstask
+      - k9-format
+      - k9-oppdrag
+      - fp-tidsserie
+    groups:
+      nav-deps:
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "*no.nav*"
+      annet-deps:
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "*no.nav*"
+          - "*jersey-bom*"
+          - "*jetty-bom*"
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "06:00"
+      timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 15
+
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "06:00"
+      timezone: "Europe/Oslo"
+    registries:
+      - ghcr
