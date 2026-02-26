@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import no.nav.k9.felles.sikkerhet.abac.StandardAbacAttributtType;
+import no.nav.ung.brukerdialog.abac.StandardAbacAttributt;
 import no.nav.ung.brukerdialog.typer.AktørId;
 
 import java.time.ZonedDateTime;
@@ -61,5 +63,11 @@ public record MigrerOppgaveDto(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     ZonedDateTime frist
 ) {
+
+    @StandardAbacAttributt(value = StandardAbacAttributtType.AKTØR_ID)
+    public String getAktørIdAsString() {
+        return aktørId.getId();
+    }
+
 }
 

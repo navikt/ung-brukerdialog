@@ -16,12 +16,14 @@ import jakarta.ws.rs.core.Response;
 import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessurs;
 import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessursActionType;
 import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessursResourceType;
+import no.nav.k9.felles.sikkerhet.abac.TilpassetAbacAttributt;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.MigrerOppgaveDto;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.MigreringsRequest;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.MigreringsResultat;
 import no.nav.ung.brukerdialog.oppgave.BrukerdialogOppgaveEntitet;
 import no.nav.ung.brukerdialog.oppgave.BrukerdialogOppgaveRepository;
 import no.nav.ung.brukerdialog.oppgave.OppgaveLivssyklusTjeneste;
+import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +73,7 @@ public class MigrerBrukerdialogOppgaverRestTjeneste {
             "Idempotent - gjør ingenting hvis oppgave med samme referanse allerede eksisterer."
     )
     @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.DRIFT)
-    public Response migrerOppgaver(@Valid @NotNull MigreringsRequest request) {
+    public Response migrerOppgaver(@Valid @NotNull @TilpassetAbacAttributt(supplierClass = AbacAttributtSupplier.class) MigreringsRequest request) {
         log.info("Mottatt forespørsel om å migrere {} oppgaver", request.oppgaver().size());
 
         int antallOpprettet = 0;

@@ -20,6 +20,7 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.OpprettOppgaveDto;
 import no.nav.ung.brukerdialog.oppgave.brukerdialog.BrukerdialogOppgaveTjeneste;
 import no.nav.ung.brukerdialog.oppgave.veileder.VeilederOppgaveTjeneste;
 import no.nav.ung.brukerdialog.typer.AktørId;
+import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtEmptySupplier;
 import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtSupplier;
 
 import java.util.List;
@@ -62,8 +63,11 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Henter en spesifikk oppgave basert på oppgavereferanse", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.READ, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto hentOppgave(
-        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") UUID oppgavereferanse) {
-
+        @NotNull
+        @PathParam("oppgavereferanse")
+        @Parameter(description = "Unik referanse til oppgaven")
+        @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class)
+        UUID oppgavereferanse) {
         return oppgaveTjeneste.hentOppgaveForOppgavereferanse(oppgavereferanse, finnAktørId());
     }
 
@@ -72,7 +76,11 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Lukker en oppgave", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto lukkOppgave(
-        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") UUID oppgavereferanse) {
+        @NotNull
+        @PathParam("oppgavereferanse")
+        @Parameter(description = "Unik referanse til oppgaven")
+        @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class)
+        UUID oppgavereferanse) {
         return oppgaveTjeneste.lukkOppgave(oppgavereferanse,finnAktørId());
     }
 
@@ -81,7 +89,7 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Åpner en oppgave", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto åpneOppgave(
-        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") UUID oppgavereferanse) {
+        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class) UUID oppgavereferanse) {
         return oppgaveTjeneste.åpneOppgave(oppgavereferanse, finnAktørId());
     }
 
@@ -90,7 +98,7 @@ public class BrukerdialogOppgaveRestTjeneste {
     @Operation(summary = "Markerer en oppgave som løst", tags = "brukerdialog-oppgave")
     @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
     public BrukerdialogOppgaveDto løsOppgave(
-        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") UUID oppgavereferanse) {
+        @NotNull @PathParam("oppgavereferanse") @Parameter(description = "Unik referanse til oppgaven") @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class) UUID oppgavereferanse) {
         return oppgaveTjeneste.løsOppgave(oppgavereferanse, finnAktørId());
     }
 
