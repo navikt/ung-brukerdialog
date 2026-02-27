@@ -7,7 +7,7 @@ import no.nav.ung.brukerdialog.oppgave.BrukerdialogOppgaveMapper;
 import no.nav.ung.brukerdialog.oppgave.BrukerdialogOppgaveRepository;
 import no.nav.ung.brukerdialog.oppgave.OppgaveLivssyklusTjeneste;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto;
-import no.nav.ung.brukerdialog.oppgave.saksbehandling.OppgaveForSaksbehandlingGrensesnittImpl;
+import no.nav.ung.brukerdialog.oppgave.saksbehandling.OppgaveForSaksbehandlingTjenesteImpl;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Tjeneste for å hente og vise brukerdialog-oppgaver.
  * Brukes primært av REST-tjenester for å hente oppgaver til visning.
  *
- * For å opprette og administrere oppgaver, bruk {@link OppgaveForSaksbehandlingGrensesnittImpl}.
+ * For å opprette og administrere oppgaver, bruk {@link OppgaveForSaksbehandlingTjenesteImpl}.
  */
 @ApplicationScoped
 public class BrukerdialogOppgaveTjenesteImpl implements BrukerdialogOppgaveTjeneste {

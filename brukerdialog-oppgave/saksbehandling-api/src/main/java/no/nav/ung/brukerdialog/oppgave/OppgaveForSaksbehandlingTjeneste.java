@@ -2,6 +2,7 @@ package no.nav.ung.brukerdialog.oppgave;
 
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.EndreOppgaveStatusDto;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OpprettOppgaveDto;
+import no.nav.ung.brukerdialog.typer.AktørId;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +12,7 @@ import java.util.UUID;
  * Implementeres av både UngOppgaveKlient (REST-klient til ekstern tjeneste)
  * og BrukerdialogOppgaveTjeneste (intern håndtering i samme applikasjon).
  */
-public interface OppgaveForSaksbehandlingGrensesnitt {
+public interface OppgaveForSaksbehandlingTjeneste {
 
     default boolean isEnabled() {
         return true;
@@ -45,16 +46,16 @@ public interface OppgaveForSaksbehandlingGrensesnitt {
     /**
      * Løser en søk-ytelse-oppgave.
      *
-     * @param deltakerIdent personidentifikator for deltakeren
+     * @param aktørId aktørId for deltakeren
      */
-    void løsSøkYtelseOppgave(String deltakerIdent);
+    void løsSøkYtelseOppgave(AktørId aktørId);
 
     /**
      * Endrer frist for en oppgave.
      *
-     * @param personIdent      personident for den oppgaven gjelder
+     * @param aktørId          aktørId for den oppgaven gjelder
      * @param eksternReferanse oppgavereferanse
      * @param frist            ny frist for oppgaven
      */
-    void endreFrist(String personIdent, UUID eksternReferanse, LocalDateTime frist);
+    void endreFrist(AktørId aktørId, UUID eksternReferanse, LocalDateTime frist);
 }

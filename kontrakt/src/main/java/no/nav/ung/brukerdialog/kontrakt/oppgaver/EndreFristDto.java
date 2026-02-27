@@ -9,34 +9,29 @@ import no.nav.k9.felles.sikkerhet.abac.StandardAbacAttributtType;
 import no.nav.ung.brukerdialog.abac.StandardAbacAttributt;
 import no.nav.ung.brukerdialog.typer.AktørId;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
- * DTO for å sette en oppgave av en gitt type og periode til utløpt eller avbrutt.
+ * DTO for å endre frist på en oppgave.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record EndreOppgaveStatusDto(
+public record EndreFristDto(
 
     @JsonProperty(value = "aktørId", required = true)
     @NotNull
     @Valid
     AktørId aktørId,
 
-    @JsonProperty(value = "oppgavetype", required = true)
+    @JsonProperty(value = "eksternReferanse", required = true)
     @NotNull
-    OppgaveType oppgavetype,
+    UUID eksternReferanse,
 
-    @JsonProperty(value = "fomDato", required = true)
+    @JsonProperty(value = "frist", required = true)
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    LocalDate fomDato,
-
-    @JsonProperty(value = "tomDato", required = true)
-    @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    LocalDate tomDato
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    LocalDateTime frist
 ) {
-
     @StandardAbacAttributt(value = StandardAbacAttributtType.AKTØR_ID)
     public String getAktørIdAsString() {
         return aktørId.getId();

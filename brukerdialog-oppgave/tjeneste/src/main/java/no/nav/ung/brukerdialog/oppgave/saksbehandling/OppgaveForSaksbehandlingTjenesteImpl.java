@@ -2,17 +2,15 @@ package no.nav.ung.brukerdialog.oppgave.saksbehandling;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import no.nav.k9.felles.integrasjon.pdl.Pdl;
 import no.nav.k9.felles.konfigurasjon.konfig.KonfigVerdi;
 import no.nav.ung.brukerdialog.oppgave.BrukerdialogOppgaveEntitet;
 import no.nav.ung.brukerdialog.oppgave.BrukerdialogOppgaveRepository;
-import no.nav.ung.brukerdialog.oppgave.OppgaveForSaksbehandlingGrensesnitt;
+import no.nav.ung.brukerdialog.oppgave.OppgaveForSaksbehandlingTjeneste;
 import no.nav.ung.brukerdialog.oppgave.OppgaveLivssyklusTjeneste;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.EndreOppgaveStatusDto;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OpprettOppgaveDto;
-import no.nav.ung.brukerdialog.oppgave.*;
 import no.nav.ung.brukerdialog.oppgave.typer.oppgave.inntektsrapportering.InntektsrapporteringOppgaveDataEntitet;
 import no.nav.ung.brukerdialog.typer.AktørId;
 import org.slf4j.Logger;
@@ -23,27 +21,24 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class OppgaveForSaksbehandlingGrensesnittImpl implements OppgaveForSaksbehandlingGrensesnitt {
+public class OppgaveForSaksbehandlingTjenesteImpl implements OppgaveForSaksbehandlingTjeneste {
 
-    private static final Logger logger = LoggerFactory.getLogger(OppgaveForSaksbehandlingGrensesnittImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(OppgaveForSaksbehandlingTjenesteImpl.class);
 
     private BrukerdialogOppgaveRepository repository;
     private OppgaveLivssyklusTjeneste oppgaveLivssyklusTjeneste;
-    private Pdl pdl;
     private boolean isEnabled;
 
-    public OppgaveForSaksbehandlingGrensesnittImpl() {
+    public OppgaveForSaksbehandlingTjenesteImpl() {
         // CDI proxy
     }
 
     @Inject
-    public OppgaveForSaksbehandlingGrensesnittImpl(BrukerdialogOppgaveRepository repository,
-                                                   OppgaveLivssyklusTjeneste oppgaveLivssyklusTjeneste,
-                                                   Pdl pdl,
-                                                   @KonfigVerdi(value = "OPPGAVER_I_UNGBRUKERDIALOG_ENABLED", defaultVerdi = "true") boolean oppgaverIUngsakEnabled) {
+    public OppgaveForSaksbehandlingTjenesteImpl(BrukerdialogOppgaveRepository repository,
+                                                OppgaveLivssyklusTjeneste oppgaveLivssyklusTjeneste,
+                                                @KonfigVerdi(value = "OPPGAVER_I_UNGBRUKERDIALOG_ENABLED", defaultVerdi = "true") boolean oppgaverIUngsakEnabled) {
         this.repository = repository;
         this.oppgaveLivssyklusTjeneste = oppgaveLivssyklusTjeneste;
-        this.pdl = pdl;
         this.isEnabled = oppgaverIUngsakEnabled;
     }
 
@@ -76,7 +71,7 @@ public class OppgaveForSaksbehandlingGrensesnittImpl implements OppgaveForSaksbe
     @Override
     public void settOppgaveTilUtløpt(EndreOppgaveStatusDto dto) {
         logger.info("Utløper oppgave av type: {} med periode [{} - {}]", dto.oppgavetype(), dto.fomDato(), dto.tomDato());
-        var aktørId = finnAktørId(dto.deltakerIdent());
+        var aktørId = dto.aktørId();
         repository.hentAlleOppgaverForAktør(aktørId).stream()
             .filter(o -> o.getStatus() == OppgaveStatus.ULØST)
             .filter(o -> o.getOppgaveType() == dto.oppgavetype())
@@ -95,7 +90,7 @@ public class OppgaveForSaksbehandlingGrensesnittImpl implements OppgaveForSaksbe
     @Override
     public void settOppgaveTilAvbrutt(EndreOppgaveStatusDto dto) {
         logger.info("Avbryter oppgave av type: {} med periode [{} - {}]", dto.oppgavetype(), dto.fomDato(), dto.tomDato());
-        var aktørId = finnAktørId(dto.deltakerIdent());
+        var aktørId = dto.aktørId();
         repository.hentAlleOppgaverForAktør(aktørId).stream()
             .filter(o -> o.getStatus() == OppgaveStatus.ULØST)
             .filter(o -> o.getOppgaveType() == dto.oppgavetype())
@@ -112,9 +107,9 @@ public class OppgaveForSaksbehandlingGrensesnittImpl implements OppgaveForSaksbe
     }
 
     @Override
-    public void løsSøkYtelseOppgave(String deltakerIdent) {
+    public void løsSøkYtelseOppgave(AktørId aktørId) {
         List<BrukerdialogOppgaveEntitet> søkYtelseOppgaver = repository.hentOppgaveForType(
-            OppgaveType.SØK_YTELSE, OppgaveStatus.ULØST, finnAktørId(deltakerIdent));
+            OppgaveType.SØK_YTELSE, OppgaveStatus.ULØST, aktørId);
         if (søkYtelseOppgaver.size() > 1) {
             logger.warn("Fant flere enn én uløst søk-ytelse-oppgave. Antall: {}", søkYtelseOppgaver.size());
         }
@@ -122,15 +117,10 @@ public class OppgaveForSaksbehandlingGrensesnittImpl implements OppgaveForSaksbe
     }
 
     @Override
-    public void endreFrist(String personIdent, UUID eksternReferanse, LocalDateTime frist) {
-        repository.endreFrist(eksternReferanse, finnAktørId(personIdent), frist);
+    public void endreFrist(AktørId aktørId, UUID eksternReferanse, LocalDateTime frist) {
+        repository.endreFrist(eksternReferanse, aktørId, frist);
     }
 
-    private AktørId finnAktørId(String deltakerIdent) {
-        String aktørIdString = pdl.hentAktørIdForPersonIdent(deltakerIdent, false)
-            .orElseThrow(() -> new IllegalArgumentException("Fant ikke aktørId for personIdent"));
-        return new AktørId(aktørIdString);
-    }
 
     private boolean gjelderSammePeriodeForInntektsrapportering(BrukerdialogOppgaveEntitet oppgave,
                                                                EndreOppgaveStatusDto dto) {
