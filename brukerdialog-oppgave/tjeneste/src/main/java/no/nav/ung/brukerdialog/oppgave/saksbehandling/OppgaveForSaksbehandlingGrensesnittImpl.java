@@ -40,7 +40,7 @@ public class OppgaveForSaksbehandlingGrensesnittImpl implements OppgaveForSaksbe
     public OppgaveForSaksbehandlingGrensesnittImpl(BrukerdialogOppgaveRepository repository,
                                                    OppgaveLivssyklusTjeneste oppgaveLivssyklusTjeneste,
                                                    Pdl pdl,
-                                                   @KonfigVerdi(value = "OPPGAVER_I_UNGSAK_ENABLED", defaultVerdi = "true") boolean oppgaverIUngsakEnabled) {
+                                                   @KonfigVerdi(value = "OPPGAVER_I_UNGBRUKERDIALOG_ENABLED", defaultVerdi = "true") boolean oppgaverIUngsakEnabled) {
         this.repository = repository;
         this.oppgaveLivssyklusTjeneste = oppgaveLivssyklusTjeneste;
         this.pdl = pdl;

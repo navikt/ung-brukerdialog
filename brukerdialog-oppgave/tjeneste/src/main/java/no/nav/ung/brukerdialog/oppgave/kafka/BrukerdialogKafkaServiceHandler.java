@@ -22,7 +22,7 @@ public class BrukerdialogKafkaServiceHandler implements AppServiceHandler {
 
     @Inject
     public BrukerdialogKafkaServiceHandler(
-        @KonfigVerdi(value = "OPPGAVER_I_UNGSAK_ENABLED", defaultVerdi = "true") boolean oppgaverIUngsakEnabled,
+        @KonfigVerdi(value = "OPPGAVER_I_UNGBRUKERDIALOG_ENABLED", defaultVerdi = "true") boolean oppgaverIUngsakEnabled,
         SvarPåVarselHendelseHåndterer svarPåVarselHendelseHåndterer) {
         this.kcm = oppgaverIUngsakEnabled ?
             new KafkaConsumerManager<>(List.of(svarPåVarselHendelseHåndterer)) :

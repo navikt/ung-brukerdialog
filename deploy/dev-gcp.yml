@@ -146,47 +146,13 @@ spec:
 
 
     # Feature-flag
-    - name: KODEVERK_SOM_STRING_TOPICS
-      value: "true"
-    - name: PUBLISER_PRODUKSJONSSTYRING_HENDELSE
-      value: "false"
-    - name: BIGQUERY_ENABLED
-      value: "true"
-    - name: HENT_INNTEKT_HENDELSER_ENABLED
-      value: "true"
-    - name: OPPFRISK_VED_INNKOMMENDE_INNTEKTSHENDELSE_ENABLED
-      value: "true"
-    - name: KLAGE_ENABLED
-      value: "true"
-    - name: INTEGRASJON_KABAL
-      value: "true"
-    - name: PUBLISER_KONTROLLERT_INNTEKT_METRIKK_ENABLED
-      value: "true"
-    - name: ENABLE_BREV_ANSVARLIG
-      value: "true"
-    - name: PROGRAMPERIODE_ENDRING_ENABLED
-      value: "true"
-    - name: OPPGAVER_I_UNGSAK_ENABLED
+    - name: OPPGAVER_I_UNGBRUKERDIALOG_ENABLED
       value: "true"
 
 
       # Konfigurasjoner
     - name: FLYWAY_REPAIR_ON_FAIL
       value: "false"
-    - name: INNSENDING_HENDELSER_FORSINKELSE
-      value: "PT1M"
-    - name: INNTEKTSKONTROLL_CRON_EXPRESSION
-      value: "0 0 7 8 * *"
-    - name: INNTEKTSRAPPORTERING_CRON_EXPRESSION
-      value: "0 0 7 1 * *"
-    - name: AKSEPTERT_DIFFERANSE_KONTROLL
-      value: "15"
-    - name: VENTEFRIST_UTTALELSE
-      value: "P1D"
-    - name: OVERSTYR_REGISTERDATA_DURATION
-      value: "PT30M"
-    - name: HENT_INNTEKT_HENDElSER_INTERVALL
-      value: "PT1M"
 
     # Audit logging
     - name: AUDITLOGGER_ENABLED
@@ -195,9 +161,3 @@ spec:
       value: "ung"
     - name: AUDITLOGGER_PRODUCT
       value: "ung-brukerdialog"
-
-    - name: PIP_USERS
-      value: "srvPDP,srvk9-tilbake,srvsaf,srvk9-abakus,Z993210,Z994080,Z994692"
-
-    - name: PIP_APPS
-      value: "dev-gcp:k9saksbehandling:sif-abac-pdp,dev-fss:teamdokumenthandtering:saf"
