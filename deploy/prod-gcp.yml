@@ -1,0 +1,162 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: ung-brukerdialog
+  namespace: k9saksbehandling
+  labels:
+    team: k9saksbehandling
+spec:
+  image: "{{ image }}"
+  port: 8902
+  liveness:
+    path: /ung/brukerdialog/internal/health/isAlive
+    initialDelay: 30
+    timeout: 5
+    periodSeconds: 10
+    failureThreshold: 27
+    # nais will try failureThreshold times before giving up and restarting the Pod
+    # Defaults to 3
+  readiness:
+    path: /ung/brukerdialog/internal/health/isReady
+    initialDelay: 30
+    timeout: 5
+    periodSeconds: 10
+    failureThreshold: 27
+  preStopHook:
+    http:
+      path: /ung/brukerdialog/internal/health/preStop
+  replicas:
+    min: 2
+    max: 2
+    cpuThresholdPercentage: 80
+  prometheus:
+    enabled: true
+    path: /ung/brukerdialog/internal/metrics/prometheus
+  observability:
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
+    autoInstrumentation:
+      enabled: true
+      runtime: java
+      destinations:
+        - id: "grafana-lgtm"
+  resources:
+    limits:
+      cpu: "4000m"
+      memory: "4096Mi"
+    requests:
+      cpu: "500m"
+      memory: "4096Mi"
+  ingresses:
+    - "https://ung-brukerdialog.intern.nav.no"
+  kafka:
+    pool: "nav-prod"
+  vault:
+    enabled: false
+  tokenx:
+    enabled: true
+  azure:
+    application:
+      enabled: true
+      replyURLs:
+        - "https://ung-brukerdialog.intern.nav.no/ung/brukerdialog/cb"
+      claims:
+        groups:
+          # 0000-CA-ung-saksbehandler
+          - id: a7b4ffd6-d512-4b0d-991d-24d582b83a57
+          # 0000-CA-ung-veileder
+          - id: 9fe53d71-5eca-4b26-b77a-534468e0db4a
+          # 0000-CA-ung-drift
+          - id: 873ae729-e918-4f35-9a26-652ca994b9c3
+        extra:
+          - "NAVident"
+          - "azp_name"
+  accessPolicy:
+    outbound:
+      external:
+        - host: "pdl-api.prod-fss-pub.nais.io"
+    inbound:
+      rules:
+        - application: ung-deltakelse-opplyser
+        - application: ung-sak
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_16
+        name: ung-sak-db
+        tier: db-custom-2-5120 # 2 CPU, 5 GB RAM
+        diskSize: 100
+        diskAutoresize: true
+        highAvailability: true
+        databases:
+          - name: ung-sak
+            envVarPrefix: DB
+        flags:
+          - name: "cloudsql.enable_pgaudit"
+            value: "on"
+          - name: "pgaudit.log"
+            value: "all"
+          - name: "pgaudit.log_parameter"
+            value: "on"
+        pointInTimeRecovery: true
+        retainedBackups : 30
+  envFrom:
+    - secret: ung-brukerdialog-secrets
+  env:
+    - name: TZ
+      value: "Europe/Oslo"
+    - name: APP_NAME
+      value: "ung-brukerdialog"
+
+    # open telemetry
+    - name: OTEL_RESOURCE_ATTRIBUTES
+      value: "service.name=ung-brukerdialog,service.namespace=k9saksbehandling,deployment.environment=p,nais.backend=elastic-apm;grafana-lgtm"
+
+    # Integrasjoner (Kafka)
+    - name: KAFKA_MINSIDE_VARSEL_TOPIC
+      value: min-side.aapen-brukervarsel-v1
+    - name: KAFKA_OPPGAVEBEKREFTELSE_TOPIC
+      value: dusseldorf.ungdomsytelse-oppgavebekreftelse-cleanup
+
+    # Loadbalancerconfig
+    - name: LOADBALANCER_URL
+      value: https://ung-brukerdialog.intern.nav.no
+
+    # PDL
+    - name: PDL_TEMA
+      value: UNG
+
+    # Restservice Generelle
+    - name: PDL_BASE_URL
+      value: https://pdl-api.prod-fss-pub.nais.io/graphql
+    - name: PDL_SCOPE
+      value: api://prod-fss.pdl.pdl-api/.default
+    - name: SIF_ABAC_PDP_SCOPE
+      value: api://prod-gcp.k9saksbehandling.sif-abac-pdp/.default
+    - name: SIF_ABAC_PDP_URL
+      value: http://sif-abac-pdp/sif/sif-abac-pdp/api/tilgangskontroll/v2/ung
+    - name: NAV_ANSATT_URL
+      value: http://sif-abac-pdp/sif/sif-abac-pdp/api/ung/nav-ansatt
+
+    # Sikkerhet:
+    - name: CLIENT_SCOPE
+      value: "api://prod-gcp.k9saksbehandling.ung-brukerdialog/.default"
+    - name: ABAC_ATTRIBUTT_DRIFT
+      value: "no.nav.abac.attributter.k9.drift"
+
+    # Feature-flag
+    - name: OPPGAVER_I_UNGBRUKERDIALOG_ENABLED
+      value: "false"
+
+    # Konfigurasjoner
+    - name: FLYWAY_REPAIR_ON_FAIL
+      value: "false"
+
+    # Audit logging
+    - name: AUDITLOGGER_ENABLED
+      value: "true"
+    - name: AUDITLOGGER_VENDOR
+      value: "ung"
+    - name: AUDITLOGGER_PRODUCT
+      value: "ung-brukerdialog"

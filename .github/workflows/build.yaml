@@ -1,0 +1,114 @@
+name: "Bygg og deploy"
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - '**.md'
+      - '**.MD'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'CODEOWNERS'
+      - '.github/*.yml'
+
+jobs:
+  build-app:
+    name: Bygg docker image
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: navikt/sif-gha-workflows/.github/workflows/maven-build-app-db.yml@main
+    with:
+      runs-on: ${{ (github.ref_name == github.event.repository.default_branch && 'ubuntu-latest-8-cores' || 'ubuntu-latest-4-cores') }}
+      java-version: 25
+      skip-tests: true
+      build-image: true
+      push-image: ${{ github.ref_name == github.event.repository.default_branch}}
+      upload-image: ${{ github.ref_name != github.event.repository.default_branch }}
+      db_schema: ung_brukerdialog_unit
+      pg_version: 16
+      t-2c: "-T1C"
+    secrets: inherit
+
+  run-unit-tests:
+    name: Enhetstester
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: navikt/sif-gha-workflows/.github/workflows/maven-build-app-db.yml@main
+    with:
+      runs-on: ${{ (github.ref_name == github.event.repository.default_branch && 'ubuntu-latest-8-cores' || 'ubuntu-latest-4-cores') }}
+      java-version: 25
+      skip-tests: false
+      build-image: false
+      push-image: false
+      upload-image: false
+      db_schema: ung_brukerdialog_unit
+      pg_version: 16
+      t-2c: "-T1C"
+    secrets: inherit
+
+  verdikjede-tester:
+    name: Verdikjedetester
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    uses: navikt/sif-gha-workflows/.github/workflows/verdikjede-test-v2.yml@main
+    if: ${{github.actor != 'dependabot[bot]'}}
+    needs: build-app
+    with:
+      tag: ${{ needs.build-app.outputs.build-version }}
+      suites: "ung,ung-tilbake,frontend-ung,aktivitetspenger"
+      override_image_artifact_name: ${{ github.ref_name != github.event.repository.default_branch && needs.build-app.outputs.image-artifact-name || null }}
+      image_version: ${{ needs.build-app.outputs.build-version }}
+
+  verdikjede-tester-dependabot:
+    name: Verdikjedetester Dependabot
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    uses: navikt/sif-gha-workflows/.github/workflows/verdikjede-test-v2.yml@main
+    if: ${{github.actor == 'dependabot[bot]'}}
+    needs: build-app
+    with:
+      tag: ${{ needs.build-app.outputs.build-version }}
+      suites: "ung,aktivitetspenger"
+      override_image_artifact_name: ${{ github.ref_name != github.event.repository.default_branch && needs.build-app.outputs.image-artifact-name || null }}
+      image_version: ${{ needs.build-app.outputs.build-version }}
+
+
+  deploy-dev:
+    name: Deploy dev
+    permissions:
+      id-token: write
+      contents: write
+    if: github.ref_name == 'master'
+    needs: [build-app, run-unit-tests]
+    uses: navikt/sif-gha-workflows/.github/workflows/maven-deploy.yml@main
+    with:
+      gar: true
+      image: ${{ needs.build-app.outputs.build-version }}
+      cluster: dev-gcp
+      naiserator_file: deploy/dev-gcp.yml
+    secrets: inherit
+
+  deploy-prod:
+    name: Deploy prod
+    permissions:
+      id-token: write
+      contents: write
+    if: github.ref_name == 'master'
+    needs: [build-app, run-unit-tests, verdikjede-tester, deploy-dev]
+    uses: navikt/sif-gha-workflows/.github/workflows/maven-deploy.yml@main
+    with:
+      gar: true
+      image: ${{ needs.build-app.outputs.build-version }}
+      cluster: prod-gcp
+      naiserator_file: deploy/prod-gcp.yml
+    secrets: inherit

@@ -1,0 +1,63 @@
+package no.nav.ung.brukerdialog.web.app.jackson;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.k9.søknad.JsonUtils;
+import no.nav.k9.søknad.Søknad;
+import no.nav.openapi.spec.utils.jackson.DynamicObjectMapperResolver;
+import no.nav.openapi.spec.utils.jackson.OpenapiCompatObjectMapperModifier;
+
+public class ObjectMapperResolver extends DynamicObjectMapperResolver {
+
+    // defaultObjektMapper brukast når input header for overstyring ikkje er satt.
+    // Har ingen overstyring, men har spesialkode for å støtte deserialisering frå kodeverdi som objekt i ein overgangsperiode,
+    // for å støtte klienter med gammal versjon av kontrakt, som dermed serialiserer Kodeverdi enums til objekt.
+    private static ObjectMapper createDefaultObjectMapper() {
+        return ObjectMapperFactory.createBaseObjectMapperCopy();
+    }
+
+    /**
+     * Oppretter ulike varianter av ObjectMapper. Klient kan deretter velge hvilken som skal brukast ved å sette header i request.
+     */
+    public ObjectMapperResolver() {
+        super(createDefaultObjectMapper());
+        final var openapiObjektMapper = OpenapiCompatObjectMapperModifier.withDefaultModifications().modify(ObjectMapperFactory.createBaseObjectMapperCopy());
+        super.addObjectMapper(JSON_SERIALIZER_OPENAPI, openapiObjektMapper);
+    }
+
+    // Brukt til testing
+    public final ObjectMapper getDefaultObjectMapper() {
+        return super.getDefaultObjectMapperCopy();
+    }
+
+    public final ObjectMapper getOpenapiObjektMapper() {
+        return super.getObjectMapperCopy(DynamicObjectMapperResolver.JSON_SERIALIZER_OPENAPI).orElseThrow();
+    }
+
+    /**
+     * Denne blir brukt for å bevare spesialtilfelle som har vore i koden.
+     * Kan forhåpentlegvis unngå å bruke den ved overgang til ny serialisering (etter testing).
+     * Viss denne kan fjernast kan superklasse brukast direkte, treng ikkje denne subklasse lenger.
+     */
+    private ObjectMapper overrideMapperForSøknad(Class<?> type, final ObjectMapper resolved) {
+        // TODO Dette bør gjøres bedre slik at registrering av ObjectMapper gjøres lokalt i Rest-tjenesten.
+        if (type.isAssignableFrom(Søknad.class)) {
+            return JsonUtils.getObjectMapper();
+        }
+        return resolved;
+    }
+
+    /**
+     * Resolver kva ObjectMapper som skal brukast for gitt type.
+     * Denne er i tillegg dynamisk basert på header frå innkommande request. For at dette skal fungere må ein bruke
+     * DynamicJacksonJsonProvider som skrur av caching av resolved ObjectMapper.
+     */
+    @Override
+    protected ObjectMapper resolveMapper(Class<?> type, String serializerOption) {
+        final var resolved = super.resolveMapper(type, serializerOption);
+        if (serializerOption.equalsIgnoreCase(JSON_SERIALIZER_OPENAPI)) {
+            return resolved;
+        }
+        // "legacy" object mappers har frå gammalt av ei spesialoverskriving:
+        return this.overrideMapperForSøknad(type, resolved);
+    }
+}
