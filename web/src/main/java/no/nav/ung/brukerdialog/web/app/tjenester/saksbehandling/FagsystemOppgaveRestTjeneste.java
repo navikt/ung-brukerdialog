@@ -137,7 +137,7 @@ public class FagsystemOppgaveRestTjeneste {
     public Response endreFrist(
         @Valid
         @NotNull
-        @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class)
+        @TilpassetAbacAttributt(supplierClass = AbacAttributtSupplier.class)
         EndreFristDto dto) {
         oppgaveForSaksbehandlingTjeneste.endreFrist(dto.aktørId(), dto.eksternReferanse(), dto.frist());
         return Response.ok().build();
