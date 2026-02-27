@@ -122,7 +122,7 @@ public class FagsystemOppgaveRestTjeneste {
     @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK)
     public Response løsSøkYtelseOppgave(
         @NotEmpty
-        @QueryParam("aktørId")
+        @Valid
         @Parameter(description = "AktørId for deltakeren")
         @TilpassetAbacAttributt(supplierClass = AbacAttributtSupplier.class)
         AktørIdDto aktørId) {
