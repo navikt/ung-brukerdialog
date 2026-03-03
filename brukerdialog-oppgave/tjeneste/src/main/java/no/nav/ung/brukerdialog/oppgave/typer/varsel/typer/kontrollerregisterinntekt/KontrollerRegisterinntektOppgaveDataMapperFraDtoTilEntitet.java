@@ -29,7 +29,7 @@ public class KontrollerRegisterinntektOppgaveDataMapperFraDtoTilEntitet implemen
             registerinntekt.totalInntekt()
         );
         registerinntekt.arbeidOgFrilansInntekter()
-            .forEach(i -> entitet.leggTilArbeidOgFrilansInntekt(i.arbeidsgiverIdentifikator(), i.inntekt()));
+            .forEach(i -> entitet.leggTilArbeidOgFrilansInntekt(i.arbeidsgiverIdentifikator(), i.arbeidsgiverNavn(), i.inntekt()));
         registerinntekt.ytelseInntekter()
             .forEach(i -> entitet.leggTilYtelseInntekt(i.ytelsetype(), i.inntekt()));
         return entitet;

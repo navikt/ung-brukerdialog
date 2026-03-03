@@ -22,13 +22,17 @@ public class ArbeidOgFrilansInntektEntitet extends BaseEntitet {
     @Column(name = "inntekt", nullable = false, updatable = false)
     private int inntekt;
 
+    @Column(name = "arbeidsgivernavn", nullable = true, updatable = false)
+    private String arbeidsgivernavn;
+
     protected ArbeidOgFrilansInntektEntitet() {
         // For JPA
     }
 
-    ArbeidOgFrilansInntektEntitet(String arbeidsgiverIdentifikator, int inntekt) {
+    ArbeidOgFrilansInntektEntitet(String arbeidsgiverIdentifikator, String arbeidsgivernavn, int inntekt) {
         this.arbeidsgiverIdentifikator = arbeidsgiverIdentifikator;
         this.inntekt = inntekt;
+        this.arbeidsgivernavn = arbeidsgivernavn;
     }
 
     public Long getId() {
@@ -41,5 +45,9 @@ public class ArbeidOgFrilansInntektEntitet extends BaseEntitet {
 
     public int getInntekt() {
         return inntekt;
+    }
+
+    public String getArbeidsgivernavn() {
+        return arbeidsgivernavn;
     }
 }

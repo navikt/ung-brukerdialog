@@ -26,7 +26,7 @@ public class KontrollerRegisterinntektOppgaveDataMapperFraEntitetTilDto implemen
         var e = (KontrollerRegisterinntektOppgaveDataEntitet) entitet;
 
         List<ArbeidOgFrilansRegisterInntektDTO> arbeidOgFrilans = e.getArbeidOgFrilansInntekter().stream()
-            .map(i -> new ArbeidOgFrilansRegisterInntektDTO(i.getInntekt(), i.getArbeidsgiverIdentifikator(), i.getArbeidsgiverIdentifikator(), finnNavn(i.getArbeidsgiverIdentifikator())))
+            .map(i -> new ArbeidOgFrilansRegisterInntektDTO(i.getInntekt(), i.getArbeidsgiverIdentifikator(), i.getArbeidsgiverIdentifikator(), i.getArbeidsgivernavn()))
             .toList();
 
         List<YtelseRegisterInntektDTO> ytelse = e.getYtelseInntekter().stream()
@@ -49,9 +49,5 @@ public class KontrollerRegisterinntektOppgaveDataMapperFraEntitetTilDto implemen
         );
     }
 
-    private String finnNavn(String arbeidsgiverIdentifikator) {
-        // TODO: Kall enhetsregister
-        return null;
-    }
 }
 

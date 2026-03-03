@@ -65,8 +65,8 @@ public class KontrollerRegisterinntektOppgaveDataEntitet extends OppgaveDataEnti
     }
 
 
-    public void leggTilArbeidOgFrilansInntekt(String arbeidsgiverIdentifikator, int inntekt) {
-        arbeidOgFrilansInntekter.add(new ArbeidOgFrilansInntektEntitet(arbeidsgiverIdentifikator, inntekt));
+    public void leggTilArbeidOgFrilansInntekt(String arbeidsgiverIdentifikator, String arbeidsgivernavn, int inntekt) {
+        arbeidOgFrilansInntekter.add(new ArbeidOgFrilansInntektEntitet(arbeidsgiverIdentifikator, arbeidsgivernavn, inntekt));
     }
 
     public void leggTilYtelseInntekt(YtelseType ytelsetype, int inntekt) {

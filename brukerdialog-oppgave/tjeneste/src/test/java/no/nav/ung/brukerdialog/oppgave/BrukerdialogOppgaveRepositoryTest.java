@@ -208,7 +208,7 @@ class BrukerdialogOppgaveRepositoryTest {
             0,
             30000
         );
-        oppgaveData.leggTilArbeidOgFrilansInntekt("123456789", 30000);
+        oppgaveData.leggTilArbeidOgFrilansInntekt("123456789", "Bedriften AS", 30000);
         oppgaveData.leggTilYtelseInntekt(YtelseType.DAGPENGER, 0);
 
         oppgave.setOppgaveData(oppgaveData);
@@ -231,6 +231,7 @@ class BrukerdialogOppgaveRepositoryTest {
         assertThat(hentetData.getTotalInntekt()).isEqualTo(30000);
         assertThat(hentetData.getArbeidOgFrilansInntekter()).hasSize(1);
         assertThat(hentetData.getArbeidOgFrilansInntekter().get(0).getArbeidsgiverIdentifikator()).isEqualTo("123456789");
+        assertThat(hentetData.getArbeidOgFrilansInntekter().get(0).getArbeidsgivernavn()).isEqualTo("Bedriften AS");
         assertThat(hentetData.getArbeidOgFrilansInntekter().get(0).getInntekt()).isEqualTo(30000);
         assertThat(hentetData.getYtelseInntekter()).hasSize(1);
         assertThat(hentetData.getYtelseInntekter().get(0).getYtelsetype()).isEqualTo(YtelseType.DAGPENGER);
@@ -247,7 +248,7 @@ class BrukerdialogOppgaveRepositoryTest {
             0,
             30000
         );
-        oppgaveData.leggTilArbeidOgFrilansInntekt("123456789", 30000);
+        oppgaveData.leggTilArbeidOgFrilansInntekt("123456789", "Bedriften AS", 30000);
         oppgaveData.leggTilYtelseInntekt(YtelseType.DAGPENGER, 0);
         return oppgaveData;
     }
