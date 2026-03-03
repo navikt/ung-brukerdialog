@@ -14,13 +14,6 @@ import java.util.UUID;
  * DTO for oppgave med all nødvendig informasjon for visning og håndtering.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonAutoDetect(
-    fieldVisibility = JsonAutoDetect.Visibility.NONE,
-    getterVisibility = JsonAutoDetect.Visibility.NONE,
-    setterVisibility = JsonAutoDetect.Visibility.NONE,
-    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-    creatorVisibility = JsonAutoDetect.Visibility.NONE
-)
 public record BrukerdialogOppgaveDto(
     @JsonProperty(value = "oppgaveReferanse", required = true)
     @NotNull
