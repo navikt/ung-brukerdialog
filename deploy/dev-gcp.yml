@@ -117,6 +117,8 @@ spec:
       value: min-side.aapen-brukervarsel-v1
     - name: KAFKA_OPPGAVEBEKREFTELSE_TOPIC
       value: dusseldorf.ungdomsytelse-oppgavebekreftelse-cleanup
+    - name: KAFKA_RAPPORTERT_INNTEKT_TOPIC
+      value: dusseldorf.ungdomsytelse-inntektsrapportering-cleanup
 
     # Loadbalancerconfig
     - name: LOADBALANCER_URL
