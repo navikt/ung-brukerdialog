@@ -17,9 +17,7 @@ import org.slf4j.LoggerFactory;
 @Transactional
 public class RapportertInntektHendelseHåndterer implements KafkaMessageHandler.KafkaStringMessageHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(RapportertInntektHendelseHåndterer.class);
-
-    private static final String GROUP_ID = "ung-varsel-bekreftelse"; // Hold konstant pga offset commit
+    private static final String GROUP_ID = "ung-inntekt-rapportering"; // Hold konstant pga offset commit
     private String topicName;
     private ProsessTaskTjeneste taskTjeneste;
 

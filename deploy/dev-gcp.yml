@@ -118,7 +118,7 @@ spec:
     - name: KAFKA_OPPGAVEBEKREFTELSE_TOPIC
       value: dusseldorf.ungdomsytelse-oppgavebekreftelse-cleanup
     - name: KAFKA_RAPPORTERT_INNTEKT_TOPIC
-      value: dusseldorf.ungdomsytelse-inntektsrapportering-cleanup
+      value: dusseldorf.ungdomsytelse-inntektsrapportering-preprosessering
 
     # Loadbalancerconfig
     - name: LOADBALANCER_URL
