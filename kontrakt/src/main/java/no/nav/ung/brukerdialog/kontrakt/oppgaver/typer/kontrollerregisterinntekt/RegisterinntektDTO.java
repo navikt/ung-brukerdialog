@@ -1,6 +1,5 @@
 package no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
@@ -13,13 +12,6 @@ import java.util.List;
  * DTO for registerinntekt med totalsummer.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonAutoDetect(
-    fieldVisibility = JsonAutoDetect.Visibility.NONE,
-    getterVisibility = JsonAutoDetect.Visibility.NONE,
-    setterVisibility = JsonAutoDetect.Visibility.NONE,
-    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-    creatorVisibility = JsonAutoDetect.Visibility.NONE
-)
 public record RegisterinntektDTO(
     @JsonProperty(value = "arbeidOgFrilansInntekter")
     @Size(max = 100)
