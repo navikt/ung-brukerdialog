@@ -108,6 +108,9 @@ public class OppgaveLivssyklusTjeneste {
     }
 
     private void opprettTaskForDeaktiveringAvVarsel(BrukerdialogOppgaveEntitet oppgaveEntitet) {
+        if (!skalPublisereVarsel) {
+            return;
+        }
         ProsessTaskData prosessTaskData = ProsessTaskData.forProsessTask(DeaktiverMinSideVarselTask.class);
         prosessTaskData.setProperty(DeaktiverMinSideVarselTask.OPPGAVE_REFERANSE, oppgaveEntitet.getOppgavereferanse().toString());
         prosessTaskTjeneste.lagre(prosessTaskData);
