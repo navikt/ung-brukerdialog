@@ -3,7 +3,9 @@ package no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntek
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -19,13 +21,13 @@ import java.util.List;
     creatorVisibility = JsonAutoDetect.Visibility.NONE
 )
 public record RegisterinntektDTO(
-    @JsonProperty(value = "arbeidOgFrilansInntekter", required = true)
-    @NotNull
-    List<ArbeidOgFrilansRegisterInntektDTO> arbeidOgFrilansInntekter,
+    @JsonProperty(value = "arbeidOgFrilansInntekter")
+    @Size(max = 100)
+    List<@Valid ArbeidOgFrilansRegisterInntektDTO> arbeidOgFrilansInntekter,
 
-    @JsonProperty(value = "ytelseInntekter", required = true)
-    @NotNull
-    List<YtelseRegisterInntektDTO> ytelseInntekter,
+    @JsonProperty(value = "ytelseInntekter")
+    @Size(max = 100)
+    List<@Valid YtelseRegisterInntektDTO> ytelseInntekter,
 
     @JsonProperty(value = "totalInntektArbeidOgFrilans", required = true)
     @NotNull

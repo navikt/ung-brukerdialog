@@ -3,7 +3,9 @@ package no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto;
 
@@ -22,13 +24,16 @@ import java.util.Set;
 )
 public record EndretPeriodeDataDto(
     @JsonProperty(value = "nyPeriode")
+    @Valid
     PeriodeDTO nyPeriode,
 
     @JsonProperty(value = "forrigePeriode")
+    @Valid
     PeriodeDTO forrigePeriode,
 
     @JsonProperty(value = "endringer", required = true)
     @NotNull
+    @Size(max = 4)
     Set<PeriodeEndringType> endringer
 ) implements OppgavetypeDataDto {
     @Override
