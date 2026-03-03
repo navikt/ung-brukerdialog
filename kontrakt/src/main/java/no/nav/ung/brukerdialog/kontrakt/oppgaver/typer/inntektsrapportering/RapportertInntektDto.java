@@ -2,7 +2,10 @@ package no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BekreftelseDTO;
 
 import java.math.BigDecimal;

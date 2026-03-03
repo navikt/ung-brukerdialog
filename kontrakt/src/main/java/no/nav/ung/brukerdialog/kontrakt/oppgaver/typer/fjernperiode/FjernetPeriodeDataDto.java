@@ -14,13 +14,6 @@ import java.time.LocalDate;
  * Data for oppgave om fjernet periode.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonAutoDetect(
-    fieldVisibility = JsonAutoDetect.Visibility.NONE,
-    getterVisibility = JsonAutoDetect.Visibility.NONE,
-    setterVisibility = JsonAutoDetect.Visibility.NONE,
-    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-    creatorVisibility = JsonAutoDetect.Visibility.NONE
-)
 public record FjernetPeriodeDataDto(
     @JsonProperty(value = "forrigeStartdato", required = true)
     @NotNull
