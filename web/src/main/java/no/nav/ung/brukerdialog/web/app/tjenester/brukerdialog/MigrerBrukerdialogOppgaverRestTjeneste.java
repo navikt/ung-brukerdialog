@@ -112,9 +112,7 @@ public class MigrerBrukerdialogOppgaverRestTjeneste {
                     oppgaveDto.bekreftelse(),
                     oppgaveDto.status(),
                     frist,
-                    løstDato,
-                    åpnetDato,
-                    lukketDato
+                    løstDato
                 );
                 oppgaveLivssyklusTjeneste.opprettOppgave(nyOppgave, oppgaveDto.oppgavetypeData());
                 antallOpprettet++;
