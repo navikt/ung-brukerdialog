@@ -6,9 +6,6 @@ import jakarta.enterprise.inject.Alternative;
 import jakarta.inject.Inject;
 import no.nav.k9.felles.sikkerhet.abac.*;
 import no.nav.sif.abac.kontrakt.abac.dto.PersonerOperasjonDto;
-import no.nav.sif.abac.kontrakt.abac.dto.SaksinformasjonOgPersonerTilgangskontrollInputDto;
-
-import java.util.Collections;
 
 @Dependent
 @Alternative
