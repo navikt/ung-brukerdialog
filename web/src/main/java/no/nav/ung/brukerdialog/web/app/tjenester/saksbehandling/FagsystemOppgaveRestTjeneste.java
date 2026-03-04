@@ -47,7 +47,7 @@ public class FagsystemOppgaveRestTjeneste {
     @POST
     @Path("/opprett")
     @Operation(summary = "Oppretter en brukerdialogoppgave", tags = "saksbehandling-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.FAGSAK)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.FAGSAK, auditlogg = false)
     public Response opprettOppgave(
         @Valid
         @NotNull
@@ -60,7 +60,7 @@ public class FagsystemOppgaveRestTjeneste {
     @POST
     @Path("/sett-avbrutt")
     @Operation(summary = "Avbryter en oppgave basert på ekstern referanse", tags = "saksbehandling-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK,  auditlogg = false)
     public Response avbrytOppgave(
         @Valid
         @NotNull
@@ -73,7 +73,7 @@ public class FagsystemOppgaveRestTjeneste {
     @POST
     @Path("/sett-utlopt")
     @Operation(summary = "Markerer en oppgave som utløpt", tags = "saksbehandling-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK,  auditlogg = false)
     public Response oppgaveUtløpt(
         @Valid
         @NotNull
@@ -86,7 +86,7 @@ public class FagsystemOppgaveRestTjeneste {
     @POST
     @Path("/sett-utlopt-for-type-og-periode")
     @Operation(summary = "Setter oppgaver av en gitt type og periode til utløpt", tags = "saksbehandling-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK,  auditlogg = false)
     public Response settOppgaveTilUtløpt(
         @Valid
         @NotNull
@@ -99,7 +99,7 @@ public class FagsystemOppgaveRestTjeneste {
     @POST
     @Path("/sett-avbrutt-for-type-og-periode")
     @Operation(summary = "Setter oppgaver av en gitt type og periode til avbrutt", tags = "saksbehandling-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK,  auditlogg = false)
     public Response settOppgaveTilAvbrutt(
         @Valid
         @NotNull
@@ -112,7 +112,7 @@ public class FagsystemOppgaveRestTjeneste {
     @POST
     @Path("/los-sok-ytelse")
     @Operation(summary = "Løser en søk-ytelse-oppgave for en deltaker", tags = "saksbehandling-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK,  auditlogg = false)
     public Response løsSøkYtelseOppgave(
         @Valid
         @NotNull
@@ -126,7 +126,7 @@ public class FagsystemOppgaveRestTjeneste {
     @POST
     @Path("/endre-frist")
     @Operation(summary = "Endrer frist for en oppgave", tags = "saksbehandling-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.FAGSAK,  auditlogg = false)
     public Response endreFrist(
         @Valid
         @NotNull

@@ -75,7 +75,8 @@ public class BrukerdialogOppgaveRestTjeneste {
     @GET
     @Path("/{oppgavereferanse}/lukk")
     @Operation(summary = "Lukker en oppgave", tags = "brukerdialog-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
+    @Deprecated(forRemoval = true)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE, auditlogg = false)
     public BrukerdialogOppgaveDto lukkOppgave(
         @Valid
         @NotNull
@@ -89,7 +90,8 @@ public class BrukerdialogOppgaveRestTjeneste {
     @GET
     @Path("/{oppgavereferanse}/apnet")
     @Operation(summary = "Åpner en oppgave", tags = "brukerdialog-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
+    @Deprecated(forRemoval = true)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE, auditlogg = false)
     public BrukerdialogOppgaveDto åpneOppgave(
         @Valid
         @NotNull
@@ -103,7 +105,7 @@ public class BrukerdialogOppgaveRestTjeneste {
     @GET
     @Path("/{oppgavereferanse}/løst")
     @Operation(summary = "Markerer en oppgave som løst", tags = "brukerdialog-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE, auditlogg = false)
     public BrukerdialogOppgaveDto løsOppgave(
         @Valid
         @NotNull
@@ -118,7 +120,7 @@ public class BrukerdialogOppgaveRestTjeneste {
     @POST
     @Path("/opprett/sok-ytelse")
     @Operation(summary = "Oppretter oppgave for å søke ytelse", tags = "brukerdialog-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.UNGDOMSPROGRAM)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.UNGDOMSPROGRAM, auditlogg = false)
     public BrukerdialogOppgaveDto opprettSøkYtelseOppgave(
         @Valid
         @NotNull
