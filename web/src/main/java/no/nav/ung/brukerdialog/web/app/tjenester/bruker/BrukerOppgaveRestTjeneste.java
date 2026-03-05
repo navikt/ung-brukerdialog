@@ -7,7 +7,10 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import no.nav.k9.felles.integrasjon.pdl.Pdl;
 import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessurs;
@@ -16,12 +19,9 @@ import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessursResourceType;
 import no.nav.k9.felles.sikkerhet.abac.TilpassetAbacAttributt;
 import no.nav.k9.sikkerhet.context.SubjectHandler;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto;
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.OpprettOppgaveDto;
 import no.nav.ung.brukerdialog.oppgave.brukerdialog.BrukerdialogOppgaveTjeneste;
-import no.nav.ung.brukerdialog.oppgave.veileder.VeilederOppgaveTjeneste;
 import no.nav.ung.brukerdialog.typer.AktørId;
 import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtEmptySupplier;
-import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtSupplier;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +34,6 @@ public class BrukerOppgaveRestTjeneste {
     static final String BASE_PATH = "/oppgave";
 
     private BrukerdialogOppgaveTjeneste oppgaveTjeneste;
-    private VeilederOppgaveTjeneste veilederOppgaveTjeneste;
     private Pdl pdl;
 
     public BrukerOppgaveRestTjeneste() {
@@ -42,10 +41,8 @@ public class BrukerOppgaveRestTjeneste {
     }
 
     @Inject
-    public BrukerOppgaveRestTjeneste(BrukerdialogOppgaveTjeneste oppgaveTjeneste,
-                                     VeilederOppgaveTjeneste veilederOppgaveTjeneste, Pdl pdl) {
+    public BrukerOppgaveRestTjeneste(BrukerdialogOppgaveTjeneste oppgaveTjeneste, Pdl pdl) {
         this.oppgaveTjeneste = oppgaveTjeneste;
-        this.veilederOppgaveTjeneste = veilederOppgaveTjeneste;
         this.pdl = pdl;
     }
 
@@ -71,21 +68,6 @@ public class BrukerOppgaveRestTjeneste {
         UUID oppgavereferanse) {
         return oppgaveTjeneste.hentOppgaveForOppgavereferanse(oppgavereferanse, finnAktørId());
     }
-
-    @POST
-    @Path("/opprett/sok-ytelse")
-    @Operation(summary = "Oppretter oppgave for å søke ytelse", tags = "brukerdialog-oppgave")
-    @Deprecated
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
-    public BrukerdialogOppgaveDto opprettSøkYtelseOppgave(
-        @Valid
-        @NotNull
-        @Parameter(description = "Data om hvem og hva det søkes om")
-        @TilpassetAbacAttributt(supplierClass = AbacAttributtSupplier.class)
-        OpprettOppgaveDto opprettSøkYtelseOppgaveDto) {
-        return veilederOppgaveTjeneste.opprettSøkYtelseOppgave(opprettSøkYtelseOppgaveDto);
-    }
-
 
     /**
      * Veksler fra personIdent i token til aktørId ved hjelp av PDL.

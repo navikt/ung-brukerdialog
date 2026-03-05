@@ -8,7 +8,10 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessurs;
@@ -16,11 +19,9 @@ import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessursActionType;
 import no.nav.k9.felles.sikkerhet.abac.BeskyttetRessursResourceType;
 import no.nav.k9.felles.sikkerhet.abac.TilpassetAbacAttributt;
 import no.nav.ung.brukerdialog.kontrakt.AktørIdDto;
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.EndreFristDto;
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.EndreOppgaveStatusDto;
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveRequest;
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.OpprettOppgaveDto;
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.*;
 import no.nav.ung.brukerdialog.oppgave.OppgaveForSaksbehandlingTjeneste;
+import no.nav.ung.brukerdialog.oppgave.veileder.VeilederOppgaveTjeneste;
 import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtSupplier;
 
 @Path(OppgavebehandlingRestTjeneste.BASE_PATH)
@@ -34,14 +35,16 @@ public class OppgavebehandlingRestTjeneste {
     static final String BASE_PATH = "/oppgavebehandling";
 
     private OppgaveForSaksbehandlingTjeneste oppgaveForSaksbehandlingTjeneste;
+    private VeilederOppgaveTjeneste veilederOppgaveTjeneste;
 
     public OppgavebehandlingRestTjeneste() {
         // CDI proxy
     }
 
     @Inject
-    public OppgavebehandlingRestTjeneste(OppgaveForSaksbehandlingTjeneste oppgaveForSaksbehandlingTjeneste) {
+    public OppgavebehandlingRestTjeneste(OppgaveForSaksbehandlingTjeneste oppgaveForSaksbehandlingTjeneste, VeilederOppgaveTjeneste veilederOppgaveTjeneste) {
         this.oppgaveForSaksbehandlingTjeneste = oppgaveForSaksbehandlingTjeneste;
+        this.veilederOppgaveTjeneste = veilederOppgaveTjeneste;
     }
 
     @POST
@@ -60,7 +63,7 @@ public class OppgavebehandlingRestTjeneste {
     @POST
     @Path("/sett-avbrutt")
     @Operation(summary = "Avbryter en oppgave basert på ekstern referanse", tags = "oppgavebehandling")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE,  auditlogg = false)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
     public Response avbrytOppgave(
         @Valid
         @NotNull
@@ -73,7 +76,7 @@ public class OppgavebehandlingRestTjeneste {
     @POST
     @Path("/sett-utlopt")
     @Operation(summary = "Markerer en oppgave som utløpt", tags = "oppgavebehandling")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE,  auditlogg = false)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
     public Response oppgaveUtløpt(
         @Valid
         @NotNull
@@ -86,7 +89,7 @@ public class OppgavebehandlingRestTjeneste {
     @POST
     @Path("/sett-utlopt-for-type-og-periode")
     @Operation(summary = "Setter oppgaver av en gitt type og periode til utløpt", tags = "oppgavebehandling")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE,  auditlogg = false)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
     public Response settOppgaveTilUtløpt(
         @Valid
         @NotNull
@@ -99,7 +102,7 @@ public class OppgavebehandlingRestTjeneste {
     @POST
     @Path("/sett-avbrutt-for-type-og-periode")
     @Operation(summary = "Setter oppgaver av en gitt type og periode til avbrutt", tags = "oppgavebehandling")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE,  auditlogg = false)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
     public Response settOppgaveTilAvbrutt(
         @Valid
         @NotNull
@@ -112,7 +115,7 @@ public class OppgavebehandlingRestTjeneste {
     @POST
     @Path("/los-sok-ytelse")
     @Operation(summary = "Løser en søk-ytelse-oppgave for en deltaker", tags = "oppgavebehandling")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE,  auditlogg = false)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
     public Response løsSøkYtelseOppgave(
         @Valid
         @NotNull
@@ -126,7 +129,7 @@ public class OppgavebehandlingRestTjeneste {
     @POST
     @Path("/endre-frist")
     @Operation(summary = "Endrer frist for en oppgave", tags = "oppgavebehandling")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE,  auditlogg = false)
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
     public Response endreFrist(
         @Valid
         @NotNull
@@ -135,5 +138,22 @@ public class OppgavebehandlingRestTjeneste {
         oppgaveForSaksbehandlingTjeneste.endreFrist(dto.aktørId(), dto.eksternReferanse(), dto.frist());
         return Response.ok().build();
     }
+
+
+    @POST
+    @Path("/opprett/sok-ytelse")
+    @Operation(summary = "Oppretter oppgave for å søke ytelse", tags = "brukerdialog-oppgave")
+    @Deprecated
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
+    public BrukerdialogOppgaveDto opprettSøkYtelseOppgave(
+        @Valid
+        @NotNull
+        @Parameter(description = "Data om hvem og hva det søkes om")
+        @TilpassetAbacAttributt(supplierClass = AbacAttributtSupplier.class)
+        OpprettOppgaveDto opprettSøkYtelseOppgaveDto) {
+        return veilederOppgaveTjeneste.opprettSøkYtelseOppgave(opprettSøkYtelseOppgaveDto);
+    }
+
+
 }
 
