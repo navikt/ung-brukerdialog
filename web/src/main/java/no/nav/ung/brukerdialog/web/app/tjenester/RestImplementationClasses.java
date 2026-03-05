@@ -1,9 +1,9 @@
 package no.nav.ung.brukerdialog.web.app.tjenester;
 
 import no.nav.k9.prosesstask.rest.ProsessTaskRestTjeneste;
-import no.nav.ung.brukerdialog.web.app.tjenester.brukerdialog.BrukerdialogOppgaveRestTjeneste;
-import no.nav.ung.brukerdialog.web.app.tjenester.brukerdialog.MigrerBrukerdialogOppgaverRestTjeneste;
-import no.nav.ung.brukerdialog.web.app.tjenester.saksbehandling.FagsystemOppgaveRestTjeneste;
+import no.nav.ung.brukerdialog.web.app.tjenester.bruker.BrukerOppgaveRestTjeneste;
+import no.nav.ung.brukerdialog.web.app.tjenester.oppgavebehandling.MigrerBrukerdialogOppgaverRestTjeneste;
+import no.nav.ung.brukerdialog.web.app.tjenester.oppgavebehandling.OppgavebehandlingRestTjeneste;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,9 +15,9 @@ public class RestImplementationClasses {
     public Collection<Class<?>> getImplementationClasses() {
         Set<Class<?>> classes = new HashSet<>();
         classes.addAll(List.of(ProsessTaskRestTjeneste.class,
-            BrukerdialogOppgaveRestTjeneste.class,
+            BrukerOppgaveRestTjeneste.class,
             MigrerBrukerdialogOppgaverRestTjeneste.class,
-            FagsystemOppgaveRestTjeneste.class));
+            OppgavebehandlingRestTjeneste.class));
         return Set.copyOf(classes);
     }
 

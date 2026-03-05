@@ -1,4 +1,4 @@
-package no.nav.ung.brukerdialog.web.app.tjenester.brukerdialog;
+package no.nav.ung.brukerdialog.web.app.tjenester.bruker;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,24 +26,24 @@ import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtSupplier;
 import java.util.List;
 import java.util.UUID;
 
-@Path(BrukerdialogOppgaveRestTjeneste.BASE_PATH)
+@Path(BrukerOppgaveRestTjeneste.BASE_PATH)
 @ApplicationScoped
 @Transactional
 @Produces(MediaType.APPLICATION_JSON)
-public class BrukerdialogOppgaveRestTjeneste {
+public class BrukerOppgaveRestTjeneste {
     static final String BASE_PATH = "/oppgave";
 
     private BrukerdialogOppgaveTjeneste oppgaveTjeneste;
     private VeilederOppgaveTjeneste veilederOppgaveTjeneste;
     private Pdl pdl;
 
-    public BrukerdialogOppgaveRestTjeneste() {
+    public BrukerOppgaveRestTjeneste() {
         // CDI proxy
     }
 
     @Inject
-    public BrukerdialogOppgaveRestTjeneste(BrukerdialogOppgaveTjeneste oppgaveTjeneste,
-                                           VeilederOppgaveTjeneste veilederOppgaveTjeneste, Pdl pdl) {
+    public BrukerOppgaveRestTjeneste(BrukerdialogOppgaveTjeneste oppgaveTjeneste,
+                                     VeilederOppgaveTjeneste veilederOppgaveTjeneste, Pdl pdl) {
         this.oppgaveTjeneste = oppgaveTjeneste;
         this.veilederOppgaveTjeneste = veilederOppgaveTjeneste;
         this.pdl = pdl;
@@ -72,25 +72,11 @@ public class BrukerdialogOppgaveRestTjeneste {
         return oppgaveTjeneste.hentOppgaveForOppgavereferanse(oppgavereferanse, finnAktørId());
     }
 
-    @GET
-    @Path("/{oppgavereferanse}/løst")
-    @Operation(summary = "Markerer en oppgave som løst", tags = "brukerdialog-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.UPDATE, resource = BeskyttetRessursResourceType.TOKENX_RESOURCE, auditlogg = false)
-    public BrukerdialogOppgaveDto løsOppgave(
-        @Valid
-        @NotNull
-        @PathParam("oppgavereferanse")
-        @Parameter(description = "Unik referanse til oppgaven")
-        @TilpassetAbacAttributt(supplierClass = AbacAttributtEmptySupplier.class)
-        UUID oppgavereferanse) {
-        return oppgaveTjeneste.løsOppgave(oppgavereferanse, finnAktørId());
-    }
-
-
     @POST
     @Path("/opprett/sok-ytelse")
     @Operation(summary = "Oppretter oppgave for å søke ytelse", tags = "brukerdialog-oppgave")
-    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.UNGDOMSPROGRAM, auditlogg = false)
+    @Deprecated
+    @BeskyttetRessurs(action = BeskyttetRessursActionType.CREATE, resource = BeskyttetRessursResourceType.OPPGAVE, auditlogg = false)
     public BrukerdialogOppgaveDto opprettSøkYtelseOppgave(
         @Valid
         @NotNull
@@ -101,7 +87,9 @@ public class BrukerdialogOppgaveRestTjeneste {
     }
 
 
-    /** Veksler fra personIdent i token til aktørId ved hjelp av PDL.
+    /**
+     * Veksler fra personIdent i token til aktørId ved hjelp av PDL.
+     *
      * @return AktørId til innlogget bruker
      */
     private AktørId finnAktørId() {
