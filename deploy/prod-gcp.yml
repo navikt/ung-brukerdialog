@@ -102,8 +102,6 @@ spec:
             value: "on"
         pointInTimeRecovery: true
         retainedBackups : 30
-  envFrom:
-    - secret: ung-brukerdialog-api-secrets
   env:
     - name: TZ
       value: "Europe/Oslo"

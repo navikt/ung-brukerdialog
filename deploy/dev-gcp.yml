@@ -101,8 +101,6 @@ spec:
           - name: ung-brukerdialog-api
             envVarPrefix: DB
         pointInTimeRecovery: true
-  envFrom:
-    - secret: ung-brukerdialog-api-secrets
   env:
     - name: TZ
       value: "Europe/Oslo"
