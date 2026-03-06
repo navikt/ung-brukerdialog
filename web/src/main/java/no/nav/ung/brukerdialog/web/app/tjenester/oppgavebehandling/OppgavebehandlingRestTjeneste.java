@@ -21,7 +21,6 @@ import no.nav.k9.felles.sikkerhet.abac.TilpassetAbacAttributt;
 import no.nav.ung.brukerdialog.kontrakt.AktørIdDto;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.*;
 import no.nav.ung.brukerdialog.oppgave.OppgaveForSaksbehandlingTjeneste;
-import no.nav.ung.brukerdialog.oppgave.veileder.VeilederOppgaveTjeneste;
 import no.nav.ung.brukerdialog.web.server.abac.AbacAttributtSupplier;
 
 @Path(OppgavebehandlingRestTjeneste.BASE_PATH)
@@ -35,16 +34,14 @@ public class OppgavebehandlingRestTjeneste {
     static final String BASE_PATH = "/oppgavebehandling";
 
     private OppgaveForSaksbehandlingTjeneste oppgaveForSaksbehandlingTjeneste;
-    private VeilederOppgaveTjeneste veilederOppgaveTjeneste;
 
     public OppgavebehandlingRestTjeneste() {
         // CDI proxy
     }
 
     @Inject
-    public OppgavebehandlingRestTjeneste(OppgaveForSaksbehandlingTjeneste oppgaveForSaksbehandlingTjeneste, VeilederOppgaveTjeneste veilederOppgaveTjeneste) {
+    public OppgavebehandlingRestTjeneste(OppgaveForSaksbehandlingTjeneste oppgaveForSaksbehandlingTjeneste) {
         this.oppgaveForSaksbehandlingTjeneste = oppgaveForSaksbehandlingTjeneste;
-        this.veilederOppgaveTjeneste = veilederOppgaveTjeneste;
     }
 
     @POST
