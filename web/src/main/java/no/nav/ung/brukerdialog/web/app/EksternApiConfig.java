@@ -1,5 +1,6 @@
 package no.nav.ung.brukerdialog.web.app;
 
+import io.swagger.v3.core.jackson.TypeNameResolver;
 import io.swagger.v3.oas.integration.OpenApiConfigurationException;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -45,11 +46,7 @@ public class EksternApiConfig extends ResourceConfig {
         new BrukerRestClasses().getRestClasses()
             .forEach(c -> openapiSetupHelper.addResourceClass(c.getName()));
         openapiSetupHelper.registerSubTypes(ObjectMapperFactory.allJsonTypeNameClasses(new BrukerRestClasses()));
-        openapiSetupHelper.setTypeNameResolver(new no.nav.openapi.spec.utils.openapi.PrefixStrippingFQNTypeNameResolver(
-            "no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.",
-            "no.nav.ung.brukerdialog.kontrakt.oppgaver.",
-            "no.nav."
-        ));
+        TypeNameResolver.std.setUseFqn(false);
         try {
             OpenAPI openAPI = openapiSetupHelper.resolveOpenAPI();
             openAPI.schemaRequirement(SECURITY_SCHEME_NAME, tokenXScheme);
