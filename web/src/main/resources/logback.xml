@@ -4,7 +4,7 @@
     <appender name="STDOUT_JSON" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-                <maxLength>13000</maxLength>
+                <maxLength>8000</maxLength>
                 <maxDepthPerThrowable>200</maxDepthPerThrowable>
                 <shortenedClassNameLength>70</shortenedClassNameLength>
                 <exclude>\$\$_Weld</exclude>
