@@ -47,6 +47,10 @@ public record MigrerOppgaveDto(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     ZonedDateTime opprettetDato,
 
+    @JsonProperty(value = "opprettetAv", required = true)
+    @NotNull
+    String opprettetAv,
+
     @JsonProperty(value = "løstDato")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     ZonedDateTime løstDato,

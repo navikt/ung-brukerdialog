@@ -88,6 +88,12 @@ public class MigrerBrukerdialogOppgaverRestTjeneste {
             var eksisterende = repository.hentOppgaveForOppgavereferanse(oppgaveDto.oppgaveReferanse());
 
             if (eksisterende.isPresent()) {
+                // Pga feil i migreringslogikk ved kjøring i test
+                if (eksisterende.get().getStatus() != oppgaveDto.status()) {
+                    eksisterende.get().setStatus(oppgaveDto.status());
+                    repository.oppdater(eksisterende.get());
+                }
+
                 log.debug("Oppgave med referanse {} eksisterer allerede, hopper over", oppgaveDto.oppgaveReferanse());
                 antallHoppetOver++;
             } else {
@@ -101,6 +107,8 @@ public class MigrerBrukerdialogOppgaverRestTjeneste {
                     ? oppgaveDto.løstDato().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime()
                     : null;
 
+                LocalDateTime opprettetTidspunkt = oppgaveDto.opprettetDato().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+
                 var nyOppgave = new BrukerdialogOppgaveEntitet(
                     oppgaveDto.oppgaveReferanse(),
                     oppgaveDto.oppgavetype(),
@@ -108,7 +116,9 @@ public class MigrerBrukerdialogOppgaverRestTjeneste {
                     oppgaveDto.respons(),
                     oppgaveDto.status(),
                     frist,
-                    løstDato
+                    løstDato,
+                    opprettetTidspunkt,
+                    oppgaveDto.opprettetAv()
                 );
                 opprettOppgave(nyOppgave, oppgaveDto.oppgavetypeData());
                 antallOpprettet++;
