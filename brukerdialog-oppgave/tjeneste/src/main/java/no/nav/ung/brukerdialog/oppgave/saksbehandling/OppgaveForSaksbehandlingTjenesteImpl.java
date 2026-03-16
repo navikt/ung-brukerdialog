@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -113,7 +114,7 @@ public class OppgaveForSaksbehandlingTjenesteImpl implements OppgaveForSaksbehan
         if (søkYtelseOppgaver.size() > 1) {
             logger.warn("Fant flere enn én uløst søk-ytelse-oppgave. Antall: {}", søkYtelseOppgaver.size());
         }
-        søkYtelseOppgaver.forEach(oppgaveLivssyklusTjeneste::løsOppgave);
+        søkYtelseOppgaver.forEach(o -> oppgaveLivssyklusTjeneste.løsOppgave(o, Optional.empty()));
     }
 
     @Override
