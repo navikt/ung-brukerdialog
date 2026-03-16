@@ -91,7 +91,9 @@ spec:
     inbound:
       rules:
         - application: ung-sak
-        - application: ung-brukerdialog-api
+        - application: k9-brukerdialog-prosessering
+          namespace: dusseldorf
+          cluster: dev-gcp
         - application: ung-deltakelse-opplyser
         - application: ungdomsytelse-deltaker
           namespace: dusseldorf
