@@ -166,10 +166,11 @@ spec:
     - name: OPPGAVER_I_UNGBRUKERDIALOG_ENABLED
       value: "true"
 
-
       # Konfigurasjoner
     - name: FLYWAY_REPAIR_ON_FAIL
       value: "false"
+    - name: SKAL_PUBLISERE_VARSEL
+      value: "true"
 
     # Audit logging
     - name: AUDITLOGGER_ENABLED
