@@ -3,9 +3,11 @@ package no.nav.ung.brukerdialog.oppgave.brukerdialog;
 
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype;
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveResponsDto;
 import no.nav.ung.brukerdialog.typer.AktørId;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -40,5 +42,5 @@ public interface BrukerdialogOppgaveTjeneste {
      * @return den løste oppgaven som DTO
      * @throws IllegalArgumentException hvis oppgaven ikke finnes
      */
-    BrukerdialogOppgaveDto løsOppgave(UUID oppgavereferanse, AktørId aktørId);
+    BrukerdialogOppgaveDto løsOppgave(UUID oppgavereferanse, AktørId aktørId, Optional<OppgaveResponsDto> oppgaveResponsDto);
 }

@@ -84,12 +84,16 @@ spec:
           - "azp_name"
   accessPolicy:
     outbound:
+      rules:
+        - application: sif-abac-pdp
       external:
         - host: "pdl-api.dev-fss-pub.nais.io"
     inbound:
       rules:
         - application: ung-sak
-        - application: ung-brukerdialog-api
+        - application: k9-brukerdialog-prosessering
+          namespace: dusseldorf
+          cluster: dev-gcp
         - application: ung-deltakelse-opplyser
         - application: ungdomsytelse-deltaker
           namespace: dusseldorf
@@ -162,10 +166,11 @@ spec:
     - name: OPPGAVER_I_UNGBRUKERDIALOG_ENABLED
       value: "true"
 
-
       # Konfigurasjoner
     - name: FLYWAY_REPAIR_ON_FAIL
       value: "false"
+    - name: SKAL_PUBLISERE_VARSEL
+      value: "true"
 
     # Audit logging
     - name: AUDITLOGGER_ENABLED

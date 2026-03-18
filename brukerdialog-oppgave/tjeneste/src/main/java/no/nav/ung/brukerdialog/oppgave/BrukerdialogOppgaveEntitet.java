@@ -81,7 +81,9 @@ public class BrukerdialogOppgaveEntitet extends BaseEntitet {
                                       OppgaveResponsDto respons,
                                       OppgaveStatus status,
                                       LocalDateTime fristTid,
-                                      LocalDateTime løstDato) {
+                                      LocalDateTime løstDato,
+                                      LocalDateTime opprettetTidspunkt,
+                                      String opprettetAv) {
         this.oppgavereferanse = oppgavereferanse;
         this.oppgaveType = oppgaveType;
         this.aktørId = aktørId;
@@ -90,6 +92,8 @@ public class BrukerdialogOppgaveEntitet extends BaseEntitet {
         this.fristTid = fristTid;
         this.løstDato = løstDato;
         this.ytelsetype = OppgaveYtelsetype.UNGDOMSPROGRAMYTELSEN;
+        this.setOpprettetTidspunkt(opprettetTidspunkt);
+        this.opprettetAv = opprettetAv;
     }
 
     public AktørId getAktørId() {
@@ -117,7 +121,7 @@ public class BrukerdialogOppgaveEntitet extends BaseEntitet {
         this.fristTid = fristTid;
     }
 
-    protected void setStatus(OppgaveStatus status) {
+    public void setStatus(OppgaveStatus status) {
         this.status = status;
     }
 

@@ -77,13 +77,17 @@ spec:
           - "azp_name"
   accessPolicy:
     outbound:
+      rules:
+        - application: sif-abac-pdp
       external:
         - host: "pdl-api.prod-fss-pub.nais.io"
     inbound:
       rules:
         - application: ung-deltakelse-opplyser
         - application: ung-sak
-        - application: ung-brukerdialog-api
+        - application: k9-brukerdialog-prosessering
+          namespace: dusseldorf
+          cluster: prod-gcp
         - application: ungdomsytelse-deltaker
           namespace: dusseldorf
           cluster: prod-gcp
