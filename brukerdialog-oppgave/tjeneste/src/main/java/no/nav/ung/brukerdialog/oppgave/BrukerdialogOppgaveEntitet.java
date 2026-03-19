@@ -6,7 +6,6 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveResponsDto;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType;
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype;
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.YtelseType;
 import no.nav.ung.brukerdialog.oppgave.typer.OppgaveDataEntitet;
 import no.nav.ung.brukerdialog.typer.AktørId;
 import org.hibernate.annotations.ColumnTransformer;
@@ -68,7 +67,7 @@ public class BrukerdialogOppgaveEntitet extends BaseEntitet {
         this.oppgaveType = oppgaveType;
         this.aktørId = aktørId;
         this.fristTid = fristTid;
-        this.ytelsetype = ytelsetype != null ? ytelsetype : OppgaveYtelsetype.UNGDOMSPROGRAMYTELSEN;
+        this.ytelsetype = ytelsetype != null ? ytelsetype : OppgaveYtelsetype.UNGDOMSYTELSE;
     }
 
     /**
@@ -91,7 +90,7 @@ public class BrukerdialogOppgaveEntitet extends BaseEntitet {
         this.status = status;
         this.fristTid = fristTid;
         this.løstDato = løstDato;
-        this.ytelsetype = OppgaveYtelsetype.UNGDOMSPROGRAMYTELSEN;
+        this.ytelsetype = OppgaveYtelsetype.UNGDOMSYTELSE;
         this.setOpprettetTidspunkt(opprettetTidspunkt);
         this.opprettetAv = opprettetAv;
     }

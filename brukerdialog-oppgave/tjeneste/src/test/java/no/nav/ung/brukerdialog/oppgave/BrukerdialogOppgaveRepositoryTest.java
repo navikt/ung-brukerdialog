@@ -53,7 +53,7 @@ class BrukerdialogOppgaveRepositoryTest {
             oppgaveReferanse,
             OppgaveType.SØK_YTELSE,
             aktørId,
-            OppgaveYtelsetype.UNGDOMSPROGRAMYTELSEN,
+            OppgaveYtelsetype.UNGDOMSYTELSE,
             null
         );
 
@@ -155,7 +155,7 @@ class BrukerdialogOppgaveRepositoryTest {
             oppgaveReferanse,
             OppgaveType.BEKREFT_AVVIK_REGISTERINNTEKT,
             aktørId,
-            OppgaveYtelsetype.UNGDOMSPROGRAMYTELSEN,
+            OppgaveYtelsetype.UNGDOMSYTELSE,
             null
         );
 
@@ -226,7 +226,7 @@ class BrukerdialogOppgaveRepositoryTest {
             oppgaveReferanse,
             type,
             aktørId,
-            OppgaveYtelsetype.UNGDOMSPROGRAMYTELSEN,
+            OppgaveYtelsetype.UNGDOMSYTELSE,
             null
         );
 
