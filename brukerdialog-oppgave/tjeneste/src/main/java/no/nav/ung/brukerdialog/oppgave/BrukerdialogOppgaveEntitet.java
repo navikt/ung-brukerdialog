@@ -111,6 +111,10 @@ public class BrukerdialogOppgaveEntitet extends BaseEntitet {
         return oppgaveType;
     }
 
+    public OppgaveYtelsetype getYtelsetype() {
+        return ytelsetype;
+    }
+
 
     public LocalDateTime getFristTid() {
         return fristTid;
