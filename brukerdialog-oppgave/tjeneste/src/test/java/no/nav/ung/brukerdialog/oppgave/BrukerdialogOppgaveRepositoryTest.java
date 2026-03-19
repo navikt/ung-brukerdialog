@@ -218,15 +218,58 @@ class BrukerdialogOppgaveRepositoryTest {
         return new SøkYtelseOppgaveDataEntitet(LocalDate.now());
     }
 
+    @Test
+    void skal_filtrere_oppgaver_på_ytelsetype() {
+        // Arrange
+        opprettOppgave(aktørId, OppgaveType.SØK_YTELSE, lagSøkYtelseOppgaveData(), OppgaveYtelsetype.UNGDOMSYTELSE);
+        opprettOppgave(aktørId, OppgaveType.SØK_YTELSE, lagSøkYtelseOppgaveData(), OppgaveYtelsetype.AKTIVITETSPENGER);
+        opprettOppgave(aktørId, OppgaveType.BEKREFT_AVVIK_REGISTERINNTEKT, lagKontrollerInntektOppgaveData(), OppgaveYtelsetype.UNGDOMSYTELSE);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        List<BrukerdialogOppgaveEntitet> ungdomsytelseOppgaver = repository.hentAlleOppgaverForAktør(aktørId, OppgaveYtelsetype.UNGDOMSYTELSE);
+        List<BrukerdialogOppgaveEntitet> aktivitetspengerOppgaver = repository.hentAlleOppgaverForAktør(aktørId, OppgaveYtelsetype.AKTIVITETSPENGER);
+
+        // Assert
+        assertThat(ungdomsytelseOppgaver).hasSize(2);
+        assertThat(ungdomsytelseOppgaver).allMatch(o -> o.getYtelsetype() == OppgaveYtelsetype.UNGDOMSYTELSE);
+        assertThat(aktivitetspengerOppgaver).hasSize(1);
+        assertThat(aktivitetspengerOppgaver).allMatch(o -> o.getYtelsetype() == OppgaveYtelsetype.AKTIVITETSPENGER);
+    }
+
+    @Test
+    void skal_hente_alle_oppgaver_uavhengig_av_ytelsetype_når_ytelsetype_er_null() {
+        // Arrange
+        opprettOppgave(aktørId, OppgaveType.SØK_YTELSE, lagSøkYtelseOppgaveData(), OppgaveYtelsetype.UNGDOMSYTELSE);
+        opprettOppgave(aktørId, OppgaveType.SØK_YTELSE, lagSøkYtelseOppgaveData(), OppgaveYtelsetype.AKTIVITETSPENGER);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        List<BrukerdialogOppgaveEntitet> alleOppgaver = repository.hentAlleOppgaverForAktør(aktørId);
+
+        // Assert
+        assertThat(alleOppgaver).hasSize(2);
+        assertThat(alleOppgaver).anyMatch(o -> o.getYtelsetype() == OppgaveYtelsetype.UNGDOMSYTELSE);
+        assertThat(alleOppgaver).anyMatch(o -> o.getYtelsetype() == OppgaveYtelsetype.AKTIVITETSPENGER);
+    }
+
     // Hjelpemetode for å opprette testoppgaver
     private BrukerdialogOppgaveEntitet opprettOppgave(AktørId aktørId, OppgaveType type, OppgaveDataEntitet oppgaveData) {
+        return opprettOppgave(aktørId, type, oppgaveData, OppgaveYtelsetype.UNGDOMSYTELSE);
+    }
+
+    private BrukerdialogOppgaveEntitet opprettOppgave(AktørId aktørId, OppgaveType type, OppgaveDataEntitet oppgaveData, OppgaveYtelsetype ytelsetype) {
         UUID oppgaveReferanse = UUID.randomUUID();
 
         BrukerdialogOppgaveEntitet oppgave = new BrukerdialogOppgaveEntitet(
             oppgaveReferanse,
             type,
             aktørId,
-            OppgaveYtelsetype.UNGDOMSYTELSE,
+            ytelsetype,
             null
         );
 
